@@ -2,7 +2,7 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: "HomwView",
+  name: "HomeView",
   data() {
     return {};
   },
@@ -20,10 +20,5 @@ export default {
 
 <template>
   <main>
-    <h1 class="text-3xl font-bold underline">Coffee</h1>
-    {{ getAllCoffee }}
-    <ul>
-      <li></li>
-    </ul>
   </main>
 </template>

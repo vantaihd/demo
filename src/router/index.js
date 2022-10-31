@@ -34,16 +34,16 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (localStorage.get("isLogin")) {
-      next();
-      return;
-    }
-    next("/auth/login");
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (localStorage.get("isLogin")) {
+//       next();
+//       return;
+//     }
+//     next("/auth/login");
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;
