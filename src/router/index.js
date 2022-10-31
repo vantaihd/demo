@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { LocalStorageService } from "../share/storage";
-
-const localStorage = new LocalStorageService();
 
 const authRoute = [
   { path: "/auth", redirect: "/auth/login" },
@@ -32,18 +29,6 @@ const router = createRouter({
       component: () => import("../views/NotFound/NotFound.vue"),
     },
   ],
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (localStorage.get("isLogin")) {
-      next();
-      return;
-    }
-    next("/auth/login");
-  } else {
-    next();
-  }
 });
 
 export default router;
