@@ -1,25 +1,64 @@
 <template>
-  <div class="login">
-    <div>
-      <form @submit.prevent="submit">
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" name="username" v-model="form.username" />
+  <div class="auth h-[100vh] flex justify-center items-center">
+    <div
+      class="
+        form
+        bg-[#F4F4F4]
+        h-[600px]
+        w-[400px]
+        rounded-[10px]
+        flex flex-col
+        items-center
+      "
+    >
+      <h1 class="text-4xl mt-[49px]">Đăng nhập</h1>
+      <form class="m-[74px]" @submit.prevent="onHandleSubmit">
+        <div class="flex flex-col w-[300px] h-[80px] mb-[20px]">
+          <label for="userName" class="mb-[10px]">Tên người dùng</label>
+          <input
+            type="text"
+            name="userName"
+            id="userName"
+            class="rouned-[10px] h-[28px] p-[10px]"
+            v-model.lazy="form.username"
+          />
+          <span class="text-red-500" v-if="!userNameIsValid"> Bắt buộc </span>
         </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" name="password" v-model="form.password" />
+        <div class="flex flex-col w-[300px] h-[80px] mb-[30px]">
+          <label for="userName" class="mb-[10px]">Mật khẩu</label>
+          <input
+            type="text"
+            name="pasword"
+            id="pasword"
+            class="rouned-[10px] h-[28px] p-[10px]"
+            v-model.lazy="form.password"
+          />
+          <span class="text-red-500" v-if="!passwordIsValid"> Bắt buộc </span>
         </div>
-        <button type="submit">Submit</button>
+        <div class="flex justify-center">
+          <button
+            class="
+              bg-[#546FFF]
+              rounded-[10px]
+              p-[10px]
+              pl-[20px]
+              pr-[20px]
+              text-white
+            "
+            type="submit"
+          >
+            Đăng nhập
+          </button>
+        </div>
       </form>
-      <p v-if="showError" id="error">Username or Password is incorrect</p>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
-
+import { LocalStorageService } from "@/share/storage";
+const localStorage = new LocalStorageService();
 export default {
   name: "AuthView",
   components: {},
@@ -29,56 +68,35 @@ export default {
         username: "",
         password: "",
       },
-      showError: false,
     };
   },
+  computed: {
+    userNameIsValid() {
+      return !!this.form.username;
+    },
+    passwordIsValid() {
+      return !!this.form.password;
+    },
+    formIsValid() {
+      return this.userNameIsValid && this.passwordIsValid;
+    },
+  },
   methods: {
-    ...mapActions(["LogIn"]),
-    async submit() {
-      const User = new FormData();
-      User.append("username", this.form.username);
-      User.append("password", this.form.password);
-      try {
-        await this.LogIn(User);
-        this.$router.push("/posts");
-        this.showError = false;
-      } catch (error) {
-        this.showError = true;
+    ...mapActions("auth", ["login"]),
+    async onHandleSubmit() {
+      if (!this.formIsValid) return;
+      const result = await this.login(this.form);
+      if (result) {
+        localStorage.set("isLogin", true);
+        this.$router.push("/");
       }
     },
   },
 };
 </script>
 
-<style scoped>
-* {
-  box-sizing: border-box;
-}
-
-label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
-}
-
-button[type="submit"] {
-  background-color: #4caf50;
-  color: white;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 30px;
-}
-
-button[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-input {
-  margin: 5px;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-  padding: 10px;
-  border-radius: 30px;
-}
-#error {
-  color: red;
+<style>
+.auth {
+  background-image: url("@/assets/images/login-bg.png");
 }
 </style>
