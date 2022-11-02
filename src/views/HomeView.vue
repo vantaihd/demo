@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "HomwView",
+  name: "HomeView",
   data() {
     return {};
   },
