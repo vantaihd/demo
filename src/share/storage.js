@@ -4,7 +4,7 @@ export class LocalStorageService {
 
   constructor() {
     if (!window.localStorage) {
-      this.isEnabled = false;
+      this.isEnabled = false;      
       console.error("Current browser does not support Local Storage");
       return;
     }
